@@ -1,8 +1,7 @@
-//evaluate array, boolean, number
-//two-level tree
 //three-level tree
 //ten-level tree 
 //props -> attr
+//Function
 //Component
 
 export function h(type, props, ...children) {
@@ -62,27 +61,41 @@ export function update(previousNode, nextNode, node) {
 function createTagOrText(element) {
 	let newNode;
 	switch (typeof element) {
+        case 'number':
 		case 'string':
 			newNode = document.createTextNode(element);
 			break;
-		case 'object':
+        case 'object':
+            // //id dev
+            if (!element.type) {
+               throw Error('Type of object is not evaluaty');
+            }
 			newNode = document.createElement(element.type);
-			break;
+            break;
+        case 'function':
+        case 'boolean':
+            newNode = null;
+            break;
 		default:
-			console.log(element);
+			console.log(typeof element);
 			throw Error('Type of element is invalid');
 			break;
 	}
 	return newNode;
 }
 
-export function add(nextNode, parrent) {
+export function add(nextNode, parent) {
     // console.log("add", nextNode, parrent.tagName);
-	if (nextNode == null || parrent == null) return;
-	const newNode = createTagOrText(nextNode);
-    parrent.appendChild(newNode);
+    if (nextNode == null || parent == null) return;
+    if(Array.isArray(nextNode)) {
+        nextNode.forEach((item) => add(item, parent));
+        return;
+    }
+    const newNode = createTagOrText(nextNode);
+    if (newNode === null) return;
+    parent.appendChild(newNode);
     //for string
-    if (typeof nextNode == "string") return;
+    if (typeof nextNode != "object") return;
     //for object
     for (let i = 0; i < nextNode.children.length; i++) {
         const nextChild = nextNode.children[i];
@@ -98,6 +111,7 @@ export function remove(parent, child) {
 export function replace(nextNode, parent, child) {
 	if (nextNode == null || parent == null || child == null) return;
     const newNode = createTagOrText(nextNode);
+    if (newNode === null) return;
 	parent.replaceChild(newNode, child);
 }
 export function render(jsx, node) {
