@@ -4,7 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --env=jsdom --watchAll"
+    "test": "jest --env=jsdom --watchAll",
+    "build": "webpack --mode development",
+    "web": "webpack-dev-server --mode development --open --content-base dist",
+    "prettier": "yarn prettier --write src/**/*.js"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -13,9 +16,13 @@
     "jest": "^22.4.3"
   },
   "dependencies": {
+    "babel-loader": "^7.1.4",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
-    "prettier": "^1.12.1"
+    "prettier": "^1.12.1",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15",
+    "webpack-dev-server": "^3.1.3"
   }
 }

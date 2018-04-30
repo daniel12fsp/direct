@@ -6,9 +6,14 @@ describe("Changed", () => {
     prev = <div />;
     next = null;
     expect(changed(prev, next)).toBe(true);
+    expect(changed(prev, prev)).toBe(false);
+    expect(changed(next, next)).toBe(false);
+
     prev = <div />;
     next = undefined;
     expect(changed(prev, next)).toBe(true);
+    expect(changed(prev, prev)).toBe(false);
+    expect(changed(next, next)).toBe(false);
   });
   it(" same div but children", () => {
     let prev, next;
@@ -24,6 +29,8 @@ describe("Changed", () => {
       </div>
     );
     expect(changed(prev, next)).toBe(true);
+    expect(changed(prev, prev)).toBe(false);
+    expect(changed(next, next)).toBe(false);
   });
   it(" div vs span", () => {
     let prev, next;
@@ -39,6 +46,8 @@ describe("Changed", () => {
       </div>
     );
     expect(changed(prev, next)).toBe(true);
+    expect(changed(prev, prev)).toBe(false);
+    expect(changed(next, next)).toBe(false);
   });
   it(" string vs div", () => {
     let prev, next;
@@ -50,5 +59,7 @@ describe("Changed", () => {
       </div>
     );
     expect(changed(prev, next)).toBe(true);
+    expect(changed(prev, prev)).toBe(false);
+    expect(changed(next, next)).toBe(false);
   });
 });
