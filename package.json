@@ -7,7 +7,7 @@
     "test": "jest --env=jsdom --watchAll",
     "build": "webpack --mode development",
     "web": "webpack-dev-server --mode development --open --content-base dist",
-    "prettier": "yarn prettier --write src/**/*.js"
+    "prettier": "prettier --write src/**/*.js"
   },
   "devDependencies": {
     "babel": "^6.23.0",

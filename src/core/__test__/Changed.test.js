@@ -28,7 +28,7 @@ describe("Changed", () => {
         <p />
       </div>
     );
-    expect(changed(prev, next)).toBe(true);
+    expect(changed(prev, next)).toBe(false);
     expect(changed(prev, prev)).toBe(false);
     expect(changed(next, next)).toBe(false);
   });

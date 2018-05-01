@@ -181,11 +181,10 @@ describe("Tree Level Tree", () => {
       update(tree1L3C, tree1L2C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
-    xit("tree1L3C vs tree2L1C", () => {
+    it("tree1L3C vs tree2L1C", () => {
       const tree1 = (
         <div>
           <span />
-          <p />
         </div>
       );
 
@@ -200,18 +199,16 @@ describe("Tree Level Tree", () => {
         </div>
       );
       const answear = p(`
-            <div>
-                <span>
-                    <h1 />
-                </span>
-                <p >
-                    <a />
-                </p>
-             </div>
+          <div>
+          <span>
+            <h1 />
+          </span>
+          <p>
+            <a />
+          </p>
+        </div>;
       `);
       add(tree1, root);
-      console.log(p(root.innerHTML));
-      console.log("-->>>>>");
       update(tree1, tree2, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
