@@ -212,5 +212,35 @@ describe("Tree Level Tree", () => {
       update(tree1, tree2, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
+    it("string vs tree", ()=> {
+      const tree1 = "string";
+      const tree2 = (
+        <div>
+          <span />
+        </div>
+      );
+      const answear = p(`
+        <div>
+        <span />
+      </div>
+      `);
+      add(tree1, root);
+      update(tree1, tree2, root);
+      expect(p(root.innerHTML)).toBe(answear);
+    });
+    it("tree vs string", ()=> {
+      const tree1 = (
+        <div>
+          <span />
+        </div>
+      );
+      const tree2 = "string";
+      const answear = p(`
+        string
+      `);
+      add(tree1, root);
+      update(tree1, tree2, root);
+      expect(p(root.innerHTML)).toBe(answear);
+    })
   });
 });

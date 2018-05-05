@@ -1,6 +1,5 @@
-//props -> attr
-//Function
 //Component
+//Function
 
 export function h(type, props, ...children) {
   return { type, props, children };
@@ -18,7 +17,7 @@ export function changed(previousNode, nextNode) {
     isSameType(previousNode, nextNode, "object") &&
     previousNode.type &&
     nextNode.type;
-  const childrenDiffType = childrenDiff && previousNode.type != nextNode.type;
+  const childrenDiffType = childrenDiff && previousNode.type != nextNode.type || previousNode.props != nextNode.props;
   if (childrenDiffType) return true;
   const strDiff =
     isSameType(previousNode, nextNode, "string") && previousNode !== nextNode;
@@ -44,6 +43,7 @@ export function update(previousNode, nextNode, node) {
     return;
   }
   const change = changed(previousNode, nextNode);
+  // console.log("change", change);
   if (change) {
     //For strings
     if (typeof nextNode == "string") {
@@ -52,17 +52,14 @@ export function update(previousNode, nextNode, node) {
     } 
     // For array
     const nextChildren = nextNode.children;
-    if (nextChildren.length == 0) {
-      if (previousNode.index) {
-        replace(nextNode, node, node.childNodes[previousNode.index]);
-      } else {
-        replace(nextNode, node, node.firstChild);
-      }
-      return;
+    if (previousNode.index) {
+      replace(nextNode, node, node.childNodes[previousNode.index]);
+    } else {
+      replace(nextNode, node, node.firstChild);
     }
   }
-  const prevChildren = previousNode.children;
-  const nextChildren = nextNode.children;
+  const prevChildren = previousNode.children || [];
+  const nextChildren = nextNode.children || [];
   const maxLength = Math.max(nextChildren.length, prevChildren.length);
   const firstChild = node.children[0];
   for (let i = 0; i < maxLength; i++) {
@@ -73,7 +70,7 @@ export function update(previousNode, nextNode, node) {
   }
 }
 
-function createTagOrText(element) {
+function createElementDom(element) {
   let newNode;
   switch (typeof element) {
     case "number":
@@ -81,11 +78,14 @@ function createTagOrText(element) {
       newNode = document.createTextNode(element);
       break;
     case "object":
-      // //id dev
+      //id dev
       if (!element.type) {
         throw Error("Type of object is not evaluaty");
       }
       newNode = document.createElement(element.type);
+      if (element.props ){
+        addProps(newNode, element.props)
+      }
       break;
     case "function":
     case "boolean":
@@ -98,13 +98,27 @@ function createTagOrText(element) {
   return newNode;
 }
 
+const events = new Set(["onclick", "onkeydown"]);
+export function addProps(node, props){
+  Object.keys(props).forEach(key => {
+    const value = props[key]
+    const normalizeteKey  = key.toLocaleLowerCase()
+    if (events.has(normalizeteKey)) { 
+      node.addEventListener(normalizeteKey.substr(2), value);
+      return;
+    }
+    if (typeof value === 'function') return;
+    node.setAttribute(normalizeteKey, value);
+  })
+}
+
 export function add(nextNode, parent) {
   if (nextNode == null || parent == null) return;
   if (Array.isArray(nextNode)) {
     nextNode.forEach(item => add(item, parent));
     return;
   }
-  const newNode = createTagOrText(nextNode);
+  const newNode = createElementDom(nextNode);
   if (newNode === null) return;
   parent.appendChild(newNode);
   //for string
@@ -126,7 +140,7 @@ export function remove(parent, child) {
 
 export function replace(nextNode, parent, child) {
   if (nextNode == null || parent == null || child == null) return;
-  const newNode = createTagOrText(nextNode);
+  const newNode = createElementDom(nextNode);
   if (newNode === null) return;
   parent.replaceChild(newNode, child);
 }

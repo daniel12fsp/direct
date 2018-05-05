@@ -62,4 +62,17 @@ describe("Changed", () => {
     expect(changed(prev, prev)).toBe(false);
     expect(changed(next, next)).toBe(false);
   });
+  it(" null props vs object props", () => {
+    let prev, next;
+    prev = ( <div />
+    );
+    next = (
+      <div hi="0"/>
+
+    );
+    expect(changed(prev, next)).toBe(true);
+    expect(changed(next, prev)).toBe(true);
+    expect(changed(prev, prev)).toBe(false);
+    expect(changed(next, next)).toBe(false);
+  });
 });
