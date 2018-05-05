@@ -1,24 +1,7 @@
-import { update, h, add } from "./core";
-
-const tree1 = (
-  <div>
-    <span />
-    <p />
-  </div>
-);
-
-const tree2 = (
-  <div>
-    <span>
-      <h1 />
-    </span>
-    <p>
-      <a />
-    </p>
-  </div>
-);
-const root = document.createElement("ul");
-add(tree1, root);
-console.log("-->>>>>");
-update(tree1, tree2, root);
-console.log(root.innerHTML);
+import "/home/daniel/code/dreact/src/core/__test__/Props.test.js";
+import "/home/daniel/code/dreact/src/core/__test__/Changed.test.js";
+import "/home/daniel/code/dreact/src/core/__test__/Component.test.js";
+import "/home/daniel/code/dreact/src/core/__test__/Evaluation.test.js";
+import "/home/daniel/code/dreact/src/core/__test__/Insert_and_Remove.test.js";
+import "/home/daniel/code/dreact/src/core/__test__/Replace.test.js";
+import "/home/daniel/code/dreact/src/core/__test__/threeLevelTree.test.js";

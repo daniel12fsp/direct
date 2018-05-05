@@ -1,6 +1,8 @@
 import { update, h, add } from "../index";
-const prettier = require("prettier");
-const p = code => prettier.format(code);
+// import Prettier from 'prettier';
+// const prettier = require('prettier');
+
+const p = code => code.replace(/\s/g, "");
 const tree1L0C = <div />;
 const tree1L1C = (
   <div>
@@ -68,9 +70,9 @@ describe("Tree Level Tree", () => {
     it("tree - twoLevel - three children", () => {
       const answear = p(`
                 <div>
-                    <span/>
-                    <p />
-                    <h1 />
+                    <span> </span>
+                    <p></p>
+                    <h1></h1>
                 </div>
             `);
       update(null, tree1L3C, root);
@@ -80,13 +82,13 @@ describe("Tree Level Tree", () => {
       const answear = p(`
                 <div>
                     <span>
-                        <h1 />
+                      <h1></h1>
                     </span>
                     <p >
-                        <span />
+                      <span> </span>
                     </p>
                     <h1 >
-                        <div />
+                      <div></div>
                     </h1>
                 </div>
             `);
@@ -125,14 +127,14 @@ describe("Tree Level Tree", () => {
     it("tree1L0C vs tree1L1C", () => {
       const answear = p(`
                 <div>
-                    <span />
+                    <span></span>
                 </div>`);
       add(tree1L0C, root);
       update(tree1L0C, tree1L1C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
     it("tree1L1C vs tree1L0C", () => {
-      const answear = p(`<div />`);
+      const answear = p(`<div > </div>`);
       add(tree1L1C, root);
       update(tree1L1C, tree1L0C, root);
       expect(p(root.innerHTML)).toBe(answear);
@@ -140,8 +142,8 @@ describe("Tree Level Tree", () => {
     it("tree1L1C vs tree1L2C", () => {
       const answear = p(`
                 <div>
-                    <span />
-                    <p />
+                  <span></span>
+                  <p></p>
                 </div>
               `);
       add(tree1L1C, root);
@@ -151,7 +153,7 @@ describe("Tree Level Tree", () => {
     it("tree1L2C vs tree1L1C", () => {
       const answear = p(`
             <div>
-                <span />
+              <span></span>
             </div>
           `);
       add(tree1L2C, root);
@@ -161,10 +163,10 @@ describe("Tree Level Tree", () => {
     it("tree1L2C vs tree1L3C", () => {
       const answear = p(`
                 <div>
-                    <span />
-                    <p />
-                    <h1 />
-                </div>;
+                    <span></span>
+                    <p></p>
+                    <h1></h1>
+                </div>
                     `);
       add(tree1L2C, root);
       update(tree1L2C, tree1L3C, root);
@@ -173,9 +175,9 @@ describe("Tree Level Tree", () => {
     it("tree1L3C vs tree1L2C", () => {
       const answear = p(`
                 <div>
-                    <span />
-                    <p />
-                </div>;
+                  <span></span>
+                  <p></p>
+                </div>
                     `);
       add(tree1L3C, root);
       update(tree1L3C, tree1L2C, root);
@@ -184,29 +186,29 @@ describe("Tree Level Tree", () => {
     it("tree1L3C vs tree2L1C", () => {
       const tree1 = (
         <div>
-          <span />
+          <span></span>
         </div>
       );
 
       const tree2 = (
         <div>
           <span>
-            <h1 />
+            <h1></h1>
           </span>
           <p>
-            <a />
+            <a></a>
           </p>
         </div>
       );
       const answear = p(`
           <div>
-          <span>
-            <h1 />
-          </span>
-          <p>
-            <a />
-          </p>
-        </div>;
+            <span>
+              <h1></h1>
+            </span>
+            <p>
+              <a></a>
+            </p>
+        </div>
       `);
       add(tree1, root);
       update(tree1, tree2, root);
@@ -216,12 +218,12 @@ describe("Tree Level Tree", () => {
       const tree1 = "string";
       const tree2 = (
         <div>
-          <span />
+            <span></span>       
         </div>
       );
       const answear = p(`
         <div>
-        <span />
+            <span></span>       
       </div>
       `);
       add(tree1, root);
