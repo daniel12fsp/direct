@@ -26,7 +26,6 @@ export function changed(previousNode, nextNode) {
 }
 
 export function update(previousNode, nextNode, node) {
-  // console.log("update", arguments);
   if (previousNode == null) {
     if (nextNode == null) {
       return;
@@ -34,34 +33,20 @@ export function update(previousNode, nextNode, node) {
     add(nextNode, node);
     return;
   }
+  const indexPrevNode = previousNode.index || 0;
   if (nextNode == null) {
-    if (previousNode.index) {
-      remove(node, node.childNodes[previousNode.index]);
-    } else {
-      remove(node, node.firstChild);
-    }
+    remove(node, node.childNodes[indexPrevNode]);
     return;
   }
   const change = changed(previousNode, nextNode);
-  // console.log("change", change);
   if (change) {
-    //For strings
-    if (typeof nextNode == "string") {
-      replace(nextNode, node, node.firstChild);
-      return;
-    } 
-    // For array
-    const nextChildren = nextNode.children;
-    if (previousNode.index) {
-      replace(nextNode, node, node.childNodes[previousNode.index]);
-    } else {
-      replace(nextNode, node, node.firstChild);
-    }
+    replace(nextNode, node, node.childNodes[indexPrevNode]);
   }
+  const firstChild = node.children[0];
+  if (firstChild === undefined) return;
   const prevChildren = previousNode.children || [];
   const nextChildren = nextNode.children || [];
   const maxLength = Math.max(nextChildren.length, prevChildren.length);
-  const firstChild = node.children[0];
   for (let i = 0; i < maxLength; i++) {
     const nextChild = nextChildren[i];
     const prevChild = prevChildren[i];
