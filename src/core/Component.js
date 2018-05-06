@@ -1,51 +1,46 @@
-export default class Component{
-    type = "COMPONENT"
-    __vd__ = null;
-    __node__ = null;
-    constructor(props){
-        this.props = props;
-        this.state = {};
-        this.__mount__();
-    }
-    __mount__(){
-        componentWillMount();
-        this.__vd__ = render();
-        componentDidMount();
-    }
+export class Component {
+	constructor(props) {
+		this.props = props;
+		this.type = 'COMPONENT';
+		this.__prevDom__ = null;
+		this.__nextDom__ = null;
+		this.__node__ = null;
+	}
+	__mount__() {
+		this.componentWillMount();
+		this.__prevDom__ = this.__nextDom__;
+		this.__nextDom__ = this.render();
+		this.componentDidMount();
+	}
 
-    __update__(){
-        componentWillUpdate();
-        if (shouldComponentUpdate()) {
-            this.__vd__ = render();
-            componentDidUpdate();
-        }
-    }
-    setState(){
-        this.__update__();
-    }
-    componentWillMount(){
+	__update__(nextProps) {
+		//TODO this line is super wrong
+		let nextState = this.state;
+		let prevState = this.state;
+		let prevProps = this.props;
 
-    }
-    componentDidMount(){
+		this.componentWillReceiveProps(nextProps);
+		this.componentWillUpdate(nextProps, nextState);
+		this.props = nextProps;
+		if (this.shouldComponentUpdate(nextProps, nextState)) {
+			this.__prevDom__ = this.__nextDom__;
+			this.__nextDom__ = this.render();
+		}
+		this.componentDidUpdate(prevProps, prevState);
+	}
+	setState() {
+		this.__update__();
+	}
 
-    }
-    componentWillUpdate(){
+	componentWillMount() {}
+	componentDidMount() {}
+	componentWillUpdate() {}
+	componentDidUpdate() {}
+	shouldComponentUpdate() {
+		return true;
+	}
+	componentWillReceiveProps() {}
+	componentWillUnmount() {}
 
-    }
-    componentDidUpdate(){
-
-    }
-    shouldComponentUpdate(){
-        return true;
-    }
-    componentWillReceiveProps(){
-
-    }
-    componentWillUnmount(){
-
-    }
-
-    render(){
-
-    }
+	render() {}
 }

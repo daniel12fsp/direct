@@ -31,6 +31,10 @@ const expect = (valueReceped) => {
             } catch (error) {
                 console.log("True")
             }
+        },
+        toEqual(valueExpected){
+            valueReceped.sort().toString() == valueExpected.sort().toString() 
+
         }
 	};
 };

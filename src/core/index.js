@@ -1,4 +1,3 @@
-//Component
 //Function
 
 export function h(type, props, ...children) {
@@ -26,10 +25,32 @@ export function changed(previousNode, nextNode) {
 }
 
 export function update(previousNode, nextNode, node) {
+  if (nextNode && nextNode.type && typeof nextNode.type === "function"){
+    if (previousNode && previousNode.type === nextNode.type) {
+      node.instance.__update__(nextNode.props);
+      nextNode = node.instance.__nextDom__;
+    } else
+    if (nextNode && nextNode.type) {
+      const newInstace = new nextNode.type(nextNode.props);
+      node.instance = newInstace;
+      node.instance.__mount__();
+      nextNode.props && nextNode.props.ref && nextNode.props.ref(node);
+      nextNode = newInstace.__nextDom__;
+    } 
+
+  } else 
+
+  if (previousNode && previousNode.type && typeof previousNode.type === "function"){
+      const nextProps = (nextNode && nextNode.props);
+      node.instance.componentWillUnmount();
+      previousNode = node.instance.__nextDom__;
+  }
+
+
   if (previousNode == null) {
     if (nextNode == null) {
       return;
-    }
+    }      
     add(nextNode, node);
     return;
   }
@@ -67,7 +88,9 @@ function createElementDom(element) {
       if (!element.type) {
         throw Error("Type of object is not evaluaty");
       }
-      newNode = document.createElement(element.type);
+      if(typeof element.type === "string"){
+        newNode = document.createElement(element.type);
+      }
       if (element.props ){
         addProps(newNode, element.props)
       }
@@ -110,7 +133,14 @@ export function add(nextNode, parent) {
   if (typeof nextNode != "object") return;
   //for object
   for (let i = 0; i < nextNode.children.length; i++) {
-    const nextChild = nextNode.children[i];
+    let nextChild = nextNode.children[i];
+    if (nextChild && nextChild.type && typeof nextChild.type === "function"){
+      const newInstace = new nextChild.type(nextChild.props);
+      newInstace.__mount__();
+      console.log("You missed");
+      //TODO I'm not saving instance
+      nextChild = newInstace.__nextDom__;
+    }
     if (nextChild && typeof nextChild == "object") {
       nextChild.index = i;
     }
