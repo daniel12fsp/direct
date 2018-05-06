@@ -26,24 +26,31 @@ export function changed(previousNode, nextNode) {
 
 export function update(previousNode, nextNode, node) {
   if (nextNode && nextNode.type && typeof nextNode.type === "function"){
-    if (previousNode && previousNode.type === nextNode.type) {
-      node.instance.__update__(nextNode.props);
-      nextNode = node.instance.__nextDom__;
-    } else
-    if (nextNode && nextNode.type) {
-      const newInstace = new nextNode.type(nextNode.props);
-      node.instance = newInstace;
-      node.instance.__mount__();
-      nextNode.props && nextNode.props.ref && nextNode.props.ref(node);
-      nextNode = newInstace.__nextDom__;
-    } 
-
+    //TODO maybe another way?
+    if (nextNode.type.prototype.render) {
+      if (previousNode && previousNode.type === nextNode.type) {
+        node.instance.__update__(nextNode.props);
+        nextNode = node.instance.__nextDom__;
+      } else
+      if (nextNode && nextNode.type) {
+        const newInstace = new nextNode.type(nextNode.props || {});
+        node.instance = newInstace;
+        node.instance.__mount__();
+        nextNode.props && nextNode.props.ref && nextNode.props.ref(node);
+        nextNode = newInstace.__nextDom__;
+      } 
+    } else {
+      nextNode = nextNode.type(nextNode.props || {});
+    }
   } else 
 
   if (previousNode && previousNode.type && typeof previousNode.type === "function"){
-      const nextProps = (nextNode && nextNode.props);
-      node.instance.componentWillUnmount();
-      previousNode = node.instance.__nextDom__;
+    if (previousNode.type.prototype.render) {
+        node.instance.componentWillUnmount();
+        previousNode = node.instance.__nextDom__;
+      } else {
+        previousNode = previousNode.type(previousNode.props);
+      }
   }
 
 
@@ -135,11 +142,16 @@ export function add(nextNode, parent) {
   for (let i = 0; i < nextNode.children.length; i++) {
     let nextChild = nextNode.children[i];
     if (nextChild && nextChild.type && typeof nextChild.type === "function"){
-      const newInstace = new nextChild.type(nextChild.props);
-      newInstace.__mount__();
-      console.log("You missed");
+      if (nextChild.type.prototype.render) {
+        const newInstace = new nextChild.type(nextChild.props || {});
+        newInstace.__mount__();
+        nextChild = newInstace.__nextDom__;
+      } else {
+        nextChild = nextChild.type(nextChild.props || {});
+      }
+
       //TODO I'm not saving instance
-      nextChild = newInstace.__nextDom__;
+      // console.log("You missed");
     }
     if (nextChild && typeof nextChild == "object") {
       nextChild.index = i;
