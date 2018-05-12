@@ -1,8 +1,8 @@
 export class Component {
+    //TODO remove method can be overwrite
 	constructor(props) {
 		this.props = props;
 		this.type = 'COMPONENT';
-		this.__prevDom__ = null;
 		this.__nextDom__ = null;
 		this.__node__ = null;
 	}
@@ -13,9 +13,8 @@ export class Component {
 		this.componentDidMount();
 	}
 
-	__update__(nextProps) {
-		//TODO this line is super wrong
-		let nextState = this.state;
+	__update__(nextProps, nextState= this.state) {
+        //TODO this line is super wrong
 		let prevState = this.state;
 		let prevProps = this.props;
 
@@ -28,8 +27,9 @@ export class Component {
 		}
 		this.componentDidUpdate(prevProps, prevState);
 	}
-	setState() {
-		this.__update__();
+	setState(state) {
+        const newState = {...this.state, ...state};
+		this.__update__(this.props, newState);
 	}
 
 	componentWillMount() {}

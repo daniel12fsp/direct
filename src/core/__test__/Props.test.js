@@ -16,4 +16,9 @@ describe("Props to attributes", () => {
         root.click();
         expect(callback).toBe("onclick");
     });
+    it("Shoud className be class", ()=> {
+        addProps(root, {className: "clasz"});
+        expect(root.hasAttribute("class")).toBe(true);
+        expect(root.getAttribute("class")).toBe("clasz")
+    });
 });

@@ -1,5 +1,5 @@
-//Function
-
+//initial setState
+//TODO make setState asynchrony again
 export function h(type, props, ...children) {
   return { type, props, children };
 }
@@ -116,14 +116,15 @@ function createElementDom(element) {
 const events = new Set(["onclick", "onkeydown"]);
 export function addProps(node, props){
   Object.keys(props).forEach(key => {
+    if (typeof value === 'function') return;
     const value = props[key]
-    const normalizeteKey  = key.toLocaleLowerCase()
+    const normalizeteKey  = key.toLocaleLowerCase();
     if (events.has(normalizeteKey)) { 
       node.addEventListener(normalizeteKey.substr(2), value);
       return;
     }
-    if (typeof value === 'function') return;
-    node.setAttribute(normalizeteKey, value);
+    const attr = key === 'className'? 'class': normalizeteKey;
+    node.setAttribute(attr, value);
   })
 }
 

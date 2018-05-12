@@ -11,20 +11,20 @@ describe("<Function />", ()=> {
     beforeEach(() => {
       root = document.createElement("div");
     });
-    xit("null vs <Function />", () => {
+    it("null vs <Function />", () => {
         const answear = p(
             `<div>Itsdumbfalse</div>`
         );
         update(null, <DumbFN beSmart={"false"}/>, root);
         expect(p(root.innerHTML)).toBe(answear);
     })
-    xit("<Function /> vs null", () => {
+    it("<Function /> vs null", () => {
         const answear = "";
         update(null, <DumbFN beSmart={"false"}/>, root);
         update( <DumbFN beSmart={"false"}/>, null, root);
         expect(p(root.innerHTML)).toBe(answear);
     });
-    xit("With props diff: <Function />  vs <Function />", () => {
+    it("With props diff: <Function />  vs <Function />", () => {
         let answear = `<div>Itsdumbfalse</div>`;
         update(null, <DumbFN beSmart={"false"}/>, root);
         expect(p(root.innerHTML)).toBe(answear);
@@ -32,7 +32,7 @@ describe("<Function />", ()=> {
         answear = "<div>Itsdumbtrue</div>";
         expect(p(root.innerHTML)).toBe(answear);
     });
-    xit("With props diff: <Function1 />  vs <Function2 />", () => {
+    it("With props diff: <Function1 />  vs <Function2 />", () => {
         let answear = "<div>Itsdumbfalse</div>";
         update(null, <DumbFN beSmart={"false"}/>, root);
         expect(p(root.innerHTML)).toBe(answear);
