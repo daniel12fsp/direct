@@ -17,6 +17,12 @@ describe("Replace", () => {
       update(<div />, "good day", root);
       expect(root.innerHTML).toBe("good day");
     });
+    it(" jsx with children vs jsx with children", () => {
+      add(<div>Be : bold</div>, root);
+      expect(root.innerHTML).toBe("<div>Be : bold</div>");
+      update(<div>Be : bold</div>, <div>Be : smart</div>, root);
+      expect(root.innerHTML).toBe("<div>Be : smart</div>");
+    });
   });
   describe("Nested", () => {
     it("One-level tree vs One-level tree ", () => {

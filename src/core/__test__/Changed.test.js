@@ -64,12 +64,8 @@ describe("Changed", () => {
   });
   it(" null props vs object props", () => {
     let prev, next;
-    prev = ( <div />
-    );
-    next = (
-      <div hi="0"/>
-
-    );
+    prev = <div />;
+    next = <div hi="0" />;
     expect(changed(prev, next)).toBe(true);
     expect(changed(next, prev)).toBe(true);
     expect(changed(prev, prev)).toBe(false);
