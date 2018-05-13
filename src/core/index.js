@@ -16,7 +16,9 @@ export function changed(previousNode, nextNode) {
     isSameType(previousNode, nextNode, "object") &&
     previousNode.type &&
     nextNode.type;
-  const childrenDiffType = childrenDiff && previousNode.type != nextNode.type || previousNode.props != nextNode.props;
+  const childrenDiffType =
+    (childrenDiff && previousNode.type != nextNode.type) ||
+    previousNode.props != nextNode.props;
   if (childrenDiffType) return true;
   const strDiff =
     isSameType(previousNode, nextNode, "string") && previousNode !== nextNode;
@@ -25,39 +27,42 @@ export function changed(previousNode, nextNode) {
 }
 
 export function update(previousNode, nextNode, node) {
-  if (nextNode && nextNode.type && typeof nextNode.type === "function"){
+  if (nextNode && nextNode.type && typeof nextNode.type === "function") {
     //TODO maybe another way?
     if (nextNode.type.prototype.render) {
       if (previousNode && previousNode.type === nextNode.type) {
         node.instance.__update__(nextNode.props);
         nextNode = node.instance.__nextDom__;
-      } else
+        return;
+      }
       if (nextNode && nextNode.type) {
         const newInstace = new nextNode.type(nextNode.props || {});
         node.instance = newInstace;
         node.instance.__mount__();
+        node.instance.__ref__ = node;
         nextNode.props && nextNode.props.ref && nextNode.props.ref(node);
         nextNode = newInstace.__nextDom__;
-      } 
+      }
     } else {
       nextNode = nextNode.type(nextNode.props || {});
     }
-  } else 
-
-  if (previousNode && previousNode.type && typeof previousNode.type === "function"){
+  } else if (
+    previousNode &&
+    previousNode.type &&
+    typeof previousNode.type === "function"
+  ) {
     if (previousNode.type.prototype.render) {
-        node.instance.componentWillUnmount();
-        previousNode = node.instance.__nextDom__;
-      } else {
-        previousNode = previousNode.type(previousNode.props);
-      }
+      node.instance.componentWillUnmount();
+      previousNode = node.instance.__nextDom__;
+    } else {
+      previousNode = previousNode.type(previousNode.props);
+    }
   }
-
 
   if (previousNode == null) {
     if (nextNode == null) {
       return;
-    }      
+    }
     add(nextNode, node);
     return;
   }
@@ -95,11 +100,11 @@ function createElementDom(element) {
       if (!element.type) {
         throw Error("Type of object is not evaluaty");
       }
-      if(typeof element.type === "string"){
+      if (typeof element.type === "string") {
         newNode = document.createElement(element.type);
       }
-      if (element.props ){
-        addProps(newNode, element.props)
+      if (element.props) {
+        addProps(newNode, element.props);
       }
       break;
     case "function":
@@ -114,18 +119,18 @@ function createElementDom(element) {
 }
 
 const events = new Set(["onclick", "onkeydown"]);
-export function addProps(node, props){
+export function addProps(node, props) {
   Object.keys(props).forEach(key => {
-    if (typeof value === 'function') return;
-    const value = props[key]
-    const normalizeteKey  = key.toLocaleLowerCase();
-    if (events.has(normalizeteKey)) { 
+    if (typeof value === "function") return;
+    const value = props[key];
+    const normalizeteKey = key.toLocaleLowerCase();
+    if (events.has(normalizeteKey)) {
       node.addEventListener(normalizeteKey.substr(2), value);
       return;
     }
-    const attr = key === 'className'? 'class': normalizeteKey;
+    const attr = key === "className" ? "class" : normalizeteKey;
     node.setAttribute(attr, value);
-  })
+  });
 }
 
 export function add(nextNode, parent) {
@@ -142,10 +147,11 @@ export function add(nextNode, parent) {
   //for object
   for (let i = 0; i < nextNode.children.length; i++) {
     let nextChild = nextNode.children[i];
-    if (nextChild && nextChild.type && typeof nextChild.type === "function"){
+    if (nextChild && nextChild.type && typeof nextChild.type === "function") {
       if (nextChild.type.prototype.render) {
         const newInstace = new nextChild.type(nextChild.props || {});
         newInstace.__mount__();
+        node.instance.__ref__ = newNode;
         nextChild = newInstace.__nextDom__;
       } else {
         nextChild = nextChild.type(nextChild.props || {});
