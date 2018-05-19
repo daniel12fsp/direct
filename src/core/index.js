@@ -1,4 +1,5 @@
 //initial setState
+// make this.setState accept function as paramaters
 //TODO make setState asynchrony again
 export function h(type, props, ...children) {
   return { type, props, children };
@@ -7,6 +8,7 @@ function isSameType(item1, item2, type) {
   return type === typeof item1 && typeof item2 === typeof item1;
 }
 export function changed(previousNode, nextNode) {
+  //TODO simplification this conditions, please
   if (previousNode == null && nextNode == null) return false;
   const typeDiff =
     typeof previousNode !== typeof nextNode ||
@@ -26,20 +28,21 @@ export function changed(previousNode, nextNode) {
   return false;
 }
 
-export function update(previousNode, nextNode, node) {
+function extractJSXfrom(previousNode, nextNode, node){
   if (nextNode && nextNode.type && typeof nextNode.type === "function") {
     //TODO maybe another way?
     if (nextNode.type.prototype.render) {
       if (previousNode && previousNode.type === nextNode.type) {
+        // node.instance.__ref__ = node;
         node.instance.__update__(nextNode.props);
         nextNode = node.instance.__nextDom__;
-        return;
+        return {previousNode, nextNode}
       }
-      if (nextNode && nextNode.type) {
+      if (nextNode && nextNode.type ) {
         const newInstace = new nextNode.type(nextNode.props || {});
         node.instance = newInstace;
-        node.instance.__mount__();
-        node.instance.__ref__ = node;
+        // node.instance.__ref__ = node;
+        node.instance.__mount__(node);
         nextNode.props && nextNode.props.ref && nextNode.props.ref(node);
         nextNode = newInstace.__nextDom__;
       }
@@ -58,6 +61,11 @@ export function update(previousNode, nextNode, node) {
       previousNode = previousNode.type(previousNode.props);
     }
   }
+  return {previousNode, nextNode}
+}
+
+export function update(previousNodeArg, nextNodeArg, node, indexPrevNode=0) {
+  let {previousNode, nextNode} = extractJSXfrom(previousNodeArg, nextNodeArg, node);
 
   if (previousNode == null) {
     if (nextNode == null) {
@@ -66,7 +74,6 @@ export function update(previousNode, nextNode, node) {
     add(nextNode, node);
     return;
   }
-  const indexPrevNode = previousNode.index || 0;
   if (nextNode == null) {
     remove(node, node.childNodes[indexPrevNode]);
     return;
@@ -83,8 +90,8 @@ export function update(previousNode, nextNode, node) {
   for (let i = 0; i < maxLength; i++) {
     const nextChild = nextChildren[i];
     const prevChild = prevChildren[i];
-    const prevNodeChild = node.children[i] || firstChild;
-    update(prevChild, nextChild, prevNodeChild);
+    const prevNodeChild = node.children[i || indexPrevNode] || firstChild;
+    update(prevChild, nextChild, prevNodeChild, i);
   }
 }
 
@@ -109,8 +116,9 @@ function createElementDom(element) {
       break;
     case "function":
     case "boolean":
-      newNode = null;
-      break;
+    newNode = null;
+    break;
+
     default:
       throw Error("Type of element is invalid");
       break;
@@ -118,7 +126,7 @@ function createElementDom(element) {
   return newNode;
 }
 
-const events = new Set(["onclick", "onkeydown"]);
+const events = new Set(["onclick", "onkeydown", "onchange", "onsubmit"]);
 export function addProps(node, props) {
   Object.keys(props).forEach(key => {
     if (typeof value === "function") return;
@@ -147,20 +155,9 @@ export function add(nextNode, parent) {
   //for object
   for (let i = 0; i < nextNode.children.length; i++) {
     let nextChild = nextNode.children[i];
-    if (nextChild && nextChild.type && typeof nextChild.type === "function") {
-      if (nextChild.type.prototype.render) {
-        const newInstace = new nextChild.type(nextChild.props || {});
-        newInstace.__mount__();
-        node.instance.__ref__ = newNode;
-        nextChild = newInstace.__nextDom__;
-      } else {
-        nextChild = nextChild.type(nextChild.props || {});
-      }
-
-      //TODO I'm not saving instance
-      // console.log("You missed");
-    }
-    if (nextChild && typeof nextChild == "object") {
+    let result = extractJSXfrom(undefined, nextChild, newNode);
+    nextChild = result.nextNode;
+    if (nextChild && typeof nextChild === 'object') {
       nextChild.index = i;
     }
     add(nextChild, newNode);

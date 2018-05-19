@@ -71,4 +71,10 @@ describe("Changed", () => {
     expect(changed(prev, prev)).toBe(false);
     expect(changed(next, next)).toBe(false);
   });
+  it(" number1 vs number2", () => {
+    expect(changed(1, 0)).toBe(true);
+    expect(changed(0, 1)).toBe(true);
+    expect(changed(1, 1)).toBe(false);
+    expect(changed(0, 0)).toBe(false);
+  });
 });

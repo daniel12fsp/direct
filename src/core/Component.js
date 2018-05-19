@@ -8,10 +8,13 @@ export class Component {
     this.__node__ = null;
     this.__ref__ = null;
   }
-  __mount__() {
+  __mount__(node) {
+    // if (! this.__nextDom__) return;
     this.componentWillMount();
     this.__prevDom__ = this.__nextDom__;
     this.__nextDom__ = this.render();
+    this.__ref__ = node;
+    update(this.__prevDom__, this.__nextDom__, this.__ref__);
     this.componentDidMount();
   }
 
