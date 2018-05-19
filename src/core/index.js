@@ -61,6 +61,10 @@ function extractJSXfrom(previousNode, nextNode, node){
       previousNode = previousNode.type(previousNode.props);
     }
   }
+  const isFunction = e => e && e.type && typeof e.type === 'function'
+  if (isFunction(previousNode) || isFunction(nextNode) ) {
+    return extractJSXfrom(previousNode, nextNode, node);
+  }
   return {previousNode, nextNode}
 }
 
@@ -110,7 +114,7 @@ function createElementDom(element) {
       if (typeof element.type === "string") {
         newNode = document.createElement(element.type);
       }
-      if (element.props) {
+      if (element.props && typeof element.type!=='function') {
         addProps(newNode, element.props);
       }
       break;

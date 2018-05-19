@@ -6,5 +6,8 @@
 // import "/home/daniel/code/dreact/src/core/__test__/threeLevelTree.test.js";
 // import "/home/daniel/code/dreact/src/core/__test__/Function.test.js"
 // import "/home/daniel/code/dreact/src/core/__test__/Component.test.js";
+// import "/home/daniel/code/dreact/src/core/__test__/components/func.simple.test.js";
 
-render(<TodoApp />, document.getElementById("root"));
+// import {render, h} from './core';
+
+// render(< />, document.getElementById("root"));
