@@ -26,8 +26,16 @@ describe("Replace", () => {
       expect(root.innerHTML).toBe("<div>Be : smart</div>");
     });
     it(" jsx with children vs jsx with children", () => {
-      const tree1 = <div>{'Be'} : {'bold'}</div>;
-      const tree2 = <div>{'Be'} : {'smart'}</div>;
+      const tree1 = (
+        <div>
+          {"Be"} : {"bold"}
+        </div>
+      );
+      const tree2 = (
+        <div>
+          {"Be"} : {"smart"}
+        </div>
+      );
       add(tree1, root);
       expect(root.innerHTML).toBe("<div>Be : bold</div>");
       update(tree1, tree2, root);

@@ -1,6 +1,8 @@
 //initial setState
 // make this.setState accept function as paramaters
 //TODO make setState asynchrony again
+
+// Name for direct ->,
 export function h(type, props, ...children) {
   return { type, props, children };
 }
@@ -28,7 +30,7 @@ export function changed(previousNode, nextNode) {
   return false;
 }
 
-function extractJSXfrom(previousNode, nextNode, node){
+function extractJSXfrom(previousNode, nextNode, node) {
   if (nextNode && nextNode.type && typeof nextNode.type === "function") {
     //TODO maybe another way?
     if (nextNode.type.prototype.render) {
@@ -36,9 +38,9 @@ function extractJSXfrom(previousNode, nextNode, node){
         // node.instance.__ref__ = node;
         node.instance.__update__(nextNode.props);
         nextNode = node.instance.__nextDom__;
-        return {previousNode, nextNode}
+        return { previousNode, nextNode };
       }
-      if (nextNode && nextNode.type ) {
+      if (nextNode && nextNode.type) {
         const newInstace = new nextNode.type(nextNode.props || {});
         node.instance = newInstace;
         // node.instance.__ref__ = node;
@@ -61,15 +63,19 @@ function extractJSXfrom(previousNode, nextNode, node){
       previousNode = previousNode.type(previousNode.props);
     }
   }
-  const isFunction = e => e && e.type && typeof e.type === 'function'
-  if (isFunction(previousNode) || isFunction(nextNode) ) {
+  const isFunction = e => e && e.type && typeof e.type === "function";
+  if (isFunction(previousNode) || isFunction(nextNode)) {
     return extractJSXfrom(previousNode, nextNode, node);
   }
-  return {previousNode, nextNode}
+  return { previousNode, nextNode };
 }
 
-export function update(previousNodeArg, nextNodeArg, node, indexPrevNode=0) {
-  let {previousNode, nextNode} = extractJSXfrom(previousNodeArg, nextNodeArg, node);
+export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
+  let { previousNode, nextNode } = extractJSXfrom(
+    previousNodeArg,
+    nextNodeArg,
+    node
+  );
 
   if (previousNode == null) {
     if (nextNode == null) {
@@ -114,14 +120,14 @@ function createElementDom(element) {
       if (typeof element.type === "string") {
         newNode = document.createElement(element.type);
       }
-      if (element.props && typeof element.type!=='function') {
+      if (element.props && typeof element.type !== "function") {
         addProps(newNode, element.props);
       }
       break;
     case "function":
     case "boolean":
-    newNode = null;
-    break;
+      newNode = undefined;
+      break;
 
     default:
       throw Error("Type of element is invalid");
@@ -152,7 +158,7 @@ export function add(nextNode, parent) {
     return;
   }
   const newNode = createElementDom(nextNode);
-  if (newNode === null) return;
+  if (newNode === undefined) return;
   parent.appendChild(newNode);
   //for string
   if (typeof nextNode != "object") return;
@@ -161,7 +167,7 @@ export function add(nextNode, parent) {
     let nextChild = nextNode.children[i];
     let result = extractJSXfrom(undefined, nextChild, newNode);
     nextChild = result.nextNode;
-    if (nextChild && typeof nextChild === 'object') {
+    if (nextChild && typeof nextChild === "object") {
       nextChild.index = i;
     }
     add(nextChild, newNode);

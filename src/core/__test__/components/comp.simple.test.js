@@ -1,18 +1,29 @@
 import { update, add, h } from "../../index";
+import { Component } from "../../Component";
+
 import { p } from "../utils.js";
 
-function Child({ msg }) {
-  return <div> {msg} </div>;
+class Child extends Component {
+  render() {
+    const { msg } = this.props;
+    return <div> {msg} </div>;
+  }
 }
 
-function Parent({ msg }) {
-  return <Child msg={msg} />;
+class Parent extends Component {
+  render() {
+    const { msg } = this.props;
+    return <Child msg={msg} />;
+  }
 }
 
-function GrandParent() {
-  return <Parent msg="Hi, Mark" />;
+class GrandParent extends Component {
+  render() {
+    return <Parent msg="Hi, Mark" />;
+  }
 }
-describe("Simple <Functional />", () => {
+
+describe("Simple <Component />", () => {
   let root;
   beforeEach(() => {
     root = document.createElement("div");

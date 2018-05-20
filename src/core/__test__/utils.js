@@ -1,3 +1,3 @@
 export function p(code) {
-     return code.replace(/\s/g, "")
+  return code.replace(/\s/g, "");
 }

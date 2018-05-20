@@ -185,7 +185,6 @@ let dumb,
 //   });
 // });
 
-
 // class Timer extends Component {
 //   constructor(props) {
 //     super(props);
@@ -224,7 +223,7 @@ let dumb,
 // })
 
 // class TodoApp extends Component {
-   
+
 //     handleChange(e) {
 //       this.setState({  });
 //     }
@@ -255,5 +254,5 @@ let dumb,
 //       const answear = p("<div><span>Seconds:</span><span>1</span></div>");
 //       expect(p(root.innerHTML)).toBe(answear);
 //     })
-  
+
 //   })
