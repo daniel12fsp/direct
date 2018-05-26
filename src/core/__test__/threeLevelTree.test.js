@@ -98,27 +98,27 @@ describe("Tree Level Tree", () => {
   });
   describe("tree vs null", () => {
     it("tree - oneLevel", () => {
-      add(tree1L0C, root);
+      update(null, tree1L0C, root);
       update(tree1L0C, null, root);
       expect(root.innerHTML).toBe("");
     });
     it("tree - twoLevel - one child", () => {
-      add(tree1L1C, root);
+      update(null, tree1L1C, root);
       update(tree1L1C, null, root);
       expect(p(root.innerHTML)).toBe("");
     });
     it("tree - twoLevel - two children", () => {
-      add(tree1L2C, root);
+      update(null, tree1L2C, root);
       update(tree1L2C, null, root);
       expect(p(root.innerHTML)).toBe("");
     });
     it("tree - twoLevel - three children", () => {
-      add(tree1L3C, root);
+      update(null, tree1L3C, root);
       update(tree1L3C, null, root);
       expect(p(root.innerHTML)).toBe("");
     });
     it("tree - three level - three children", () => {
-      add(tree2L1C, root);
+      update(null, tree2L1C, root);
       update(tree2L1C, null, root);
       expect(p(root.innerHTML)).toBe("");
     });
@@ -129,13 +129,13 @@ describe("Tree Level Tree", () => {
                 <div>
                     <span></span>
                 </div>`);
-      add(tree1L0C, root);
+      update(null, tree1L0C, root);
       update(tree1L0C, tree1L1C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
     it("tree1L1C vs tree1L0C", () => {
       const answear = p(`<div > </div>`);
-      add(tree1L1C, root);
+      update(null, tree1L1C, root);
       update(tree1L1C, tree1L0C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -146,7 +146,8 @@ describe("Tree Level Tree", () => {
                   <p></p>
                 </div>
               `);
-      add(tree1L1C, root);
+      update(null, tree1L1C, root);
+      expect(p(root.innerHTML)).toBe("<div><span></span></div>");
       update(tree1L1C, tree1L2C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -156,7 +157,8 @@ describe("Tree Level Tree", () => {
               <span></span>
             </div>
           `);
-      add(tree1L2C, root);
+      update(null, tree1L2C, root);
+      expect(p(root.innerHTML)).toBe("<div><span></span><p></p></div>");
       update(tree1L2C, tree1L1C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -168,7 +170,8 @@ describe("Tree Level Tree", () => {
                     <h1></h1>
                 </div>
                     `);
-      add(tree1L2C, root);
+      update(null, tree1L2C, root);
+      expect(p(root.innerHTML)).toBe("<div><span></span><p></p></div>");
       update(tree1L2C, tree1L3C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -179,7 +182,10 @@ describe("Tree Level Tree", () => {
                   <p></p>
                 </div>
                     `);
-      add(tree1L3C, root);
+      update(null, tree1L3C, root);
+      expect(p(root.innerHTML)).toBe(
+        "<div><span></span><p></p><h1></h1></div>"
+      );
       update(tree1L3C, tree1L2C, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -210,7 +216,7 @@ describe("Tree Level Tree", () => {
             </p>
         </div>
       `);
-      add(tree1, root);
+      update(null, tree1L1C, root);
       update(tree1, tree2, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -226,7 +232,7 @@ describe("Tree Level Tree", () => {
             <span></span>       
       </div>
       `);
-      add(tree1, root);
+      update(null, tree1, root);
       update(tree1, tree2, root);
       expect(p(root.innerHTML)).toBe(answear);
     });
@@ -240,7 +246,7 @@ describe("Tree Level Tree", () => {
       const answear = p(`
         string
       `);
-      add(tree1, root);
+      update(null, tree1, root);
       update(tree1, tree2, root);
       expect(p(root.innerHTML)).toBe(answear);
     });

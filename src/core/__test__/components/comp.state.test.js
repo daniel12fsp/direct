@@ -3,8 +3,8 @@ import { Component } from "../../Component";
 
 import { p } from "../utils.js";
 let parentRef, childRef;
-let fnChild= e => (childRef = e)
-let fnParent= e => (parentRef = e)
+let fnChild = e => (childRef = e);
+let fnParent = e => (parentRef = e);
 
 class Child extends Component {
   render() {
@@ -25,7 +25,11 @@ class Parent extends Component {
   }
   render() {
     const { msg } = this.state;
-    return <div><Child msg={msg} ref={fnChild} /></div>;
+    return (
+      <div>
+        <Child msg={msg} ref={fnChild} />
+      </div>
+    );
   }
 }
 
@@ -36,15 +40,17 @@ describe("State <Component />", () => {
   });
   it("Parent Works", () => {
     update(null, <Parent ref={fnParent} />, root);
-    expect(childRef.instance.props).toEqual({msg: "Do you have time?", ref:fnChild });
-    expect(childRef.instance.state).toEqual({});
+    expect(childRef.props).toEqual({
+      msg: "Do you have time?",
+      ref: fnChild
+    });
+    expect(childRef.state).toEqual({});
 
-    expect(parentRef.instance.props).toEqual({ref: fnParent} );
-    expect(parentRef.instance.state).toEqual({msg: "Do you have time?"});
+    expect(parentRef.props).toEqual({ ref: fnParent });
+    expect(parentRef.state).toEqual({ msg: "Do you have time?" });
 
     expect(p(root.innerHTML)).toBe("<div><div>Doyouhavetime?</div></div>");
-
-    parentRef.instance.setMsg();
+    parentRef.setMsg();
     expect(p(root.innerHTML)).toBe("<div><div>Hi,Geovana</div></div>");
   });
 });

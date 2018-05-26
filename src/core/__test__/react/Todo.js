@@ -5,7 +5,7 @@
 //       this.handleChange = this.handleChange.bind(this);
 //       this.handleSubmit = this.handleSubmit.bind(this);
 //     }
-  
+
 //     render() {
 //       return (
 //         <div>
@@ -27,11 +27,11 @@
 //         </div>
 //       );
 //     }
-  
+
 //     handleChange(e) {
 //       this.setState({ text: e.target.value });
 //     }
-  
+
 //     handleSubmit(e) {
 //       e.preventDefault();
 //       if (!this.state.text.length) {
@@ -47,7 +47,7 @@
 //       }));
 //     }
 //   }
-  
+
 //   class TodoList extends React.Component {
 //     render() {
 //       return (
@@ -59,70 +59,65 @@
 //       );
 //     }
 //   }
-  
+
 //   ReactDOM.render(<TodoApp />, mountNode);
 
-  import { render, h } from "../../index";
+import { render, h } from "../../index";
 import { Component } from "../../Component";
 
 class TodoApp extends Component {
-    constructor(props) {
-      super(props);
-      this.state = { items: [], text: '' };
-      this.handleChange = this.handleChange.bind(this);
-      this.handleClick = this.handleClick.bind(this);
-    }
-  
+  constructor(props) {
+    super(props);
+    this.state = { items: [], text: "" };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-  
-    handleChange(e) {
+  handleChange(e) {
     //   this.setState({ text: e.target.value });
-    }
-  
-    handleClick(e) {
-    console.log("handleClick");
-      const newItem = {
-        text: this.state.text,
-        id: Date.now()
-      };
-      const {items} = this.state;
-      this.setState({
-        items: [...items, newItem],
-        text: ''
-      });
-    }
+  }
 
-    render() {
-        return (
-          <div>
-            <h3>TODO</h3>
-            <TodoList items={this.state.items} />
-              <label htmlFor="new-todo">
-                What needs to be done?
-              </label>
-              <input
-                id="new-todo"
-                onChange={this.handleChange}
-                value={this.state.text}
-              />
-              <button onClick={this.handleClick}>
-                Add #{this.state.items.length + 1}
-              </button>
-          </div>
-        );
-      }
+  handleClick(e) {
+    console.log("handleClick");
+    const newItem = {
+      text: this.state.text,
+      id: Date.now()
+    };
+    const { items } = this.state;
+    this.setState({
+      items: [...items, newItem],
+      text: ""
+    });
   }
-  
-  class TodoList extends Component {
-    render() {
-      return (
-        <ul>
-          {this.props.items.map(item => (
-            <li key={item.id}>{item.text}</li>
-          ))}
-        </ul>
-      );
-    }
+
+  render() {
+    return (
+      <div>
+        {/* <h3>TODO</h3> */}
+        {/* <TodoList items={this.state.items} /> */}
+        <label >What needs to be done?</label>
+        <div></div>
+        {/* <input
+          onChange={this.handleChange}
+          value={this.state.text}
+        /> */}
+        <span > {this.state.items.length + 4}</span>  
+        {/* <button onClick={this.handleClick}>
+          Add #{this.state.items.length + 1}
+        </button>   */}
+      </div>
+    );
   }
-  
-  render(<TodoApp />, document.getElementById("root"));
+}
+
+class TodoList extends Component {
+  render() {
+    return (
+      <ul>
+        {this.props.items.map(item => <li key={item.id}>{item.text}</li>)}
+      </ul>
+    );
+  }
+}
+
+render(<TodoApp ref={e=> window.ref = e} />, document.getElementById("root"));

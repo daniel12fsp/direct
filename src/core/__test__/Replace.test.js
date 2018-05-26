@@ -6,13 +6,13 @@ describe("Replace", () => {
   });
   describe("Non-nested", () => {
     it("string vs jsx", () => {
-      add("good day", root);
+      update(null, "good day", root);
       expect(root.innerHTML).toBe("good day");
       update("good day", <div />, root);
       expect(root.innerHTML).toBe("<div></div>");
     });
     it(" jsx vs string", () => {
-      add(<div />, root);
+      update(null, <div />, root);
       expect(root.innerHTML).toBe("<div></div>");
       update(<div />, "good day", root);
       expect(root.innerHTML).toBe("good day");
@@ -20,7 +20,7 @@ describe("Replace", () => {
     it(" jsx with children vs jsx with children", () => {
       const tree1 = <div>Be : bold</div>;
       const tree2 = <div>Be : smart</div>;
-      add(tree1, root);
+      update(null, tree1, root);
       expect(root.innerHTML).toBe("<div>Be : bold</div>");
       update(tree1, tree2, root);
       expect(root.innerHTML).toBe("<div>Be : smart</div>");
@@ -36,7 +36,7 @@ describe("Replace", () => {
           {"Be"} : {"smart"}
         </div>
       );
-      add(tree1, root);
+      update(null, tree1, root);
       expect(root.innerHTML).toBe("<div>Be : bold</div>");
       update(tree1, tree2, root);
       expect(root.innerHTML).toBe("<div>Be : smart</div>");

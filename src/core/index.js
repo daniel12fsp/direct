@@ -45,7 +45,7 @@ function extractJSXfrom(previousNode, nextNode, node) {
         node.instance = newInstace;
         // node.instance.__ref__ = node;
         node.instance.__mount__(node);
-        nextNode.props && nextNode.props.ref && nextNode.props.ref(node);
+        nextNode.props && nextNode.props.ref && nextNode.props.ref(newInstace);
         nextNode = newInstace.__nextDom__;
       }
     } else {
@@ -82,20 +82,20 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
       return;
     }
     add(nextNode, node);
-    return;
-  }
-  if (nextNode == null) {
+    // return;
+  } else if (nextNode == null) {
+    if (node=== undefined) return;
     remove(node, node.childNodes[indexPrevNode]);
     return;
-  }
+  } else {
   const change = changed(previousNode, nextNode);
   if (change) {
     replace(nextNode, node, node.childNodes[indexPrevNode]);
   }
+  }
   const firstChild = node.children[0];
-  if (firstChild === undefined) return;
-  const prevChildren = previousNode.children || [];
-  const nextChildren = nextNode.children || [];
+  const prevChildren = (previousNode && previousNode.children) || [];
+  const nextChildren = (nextNode && nextNode.children) || [];
   const maxLength = Math.max(nextChildren.length, prevChildren.length);
   for (let i = 0; i < maxLength; i++) {
     const nextChild = nextChildren[i];
@@ -114,9 +114,9 @@ function createElementDom(element) {
       break;
     case "object":
       //id dev
-      if (!element.type) {
-        throw Error("Type of object is not evaluaty");
-      }
+      // if (!element.type) {
+      //   throw Error("Type of object is not evaluaty");
+      // }
       if (typeof element.type === "string") {
         newNode = document.createElement(element.type);
       }
@@ -160,18 +160,6 @@ export function add(nextNode, parent) {
   const newNode = createElementDom(nextNode);
   if (newNode === undefined) return;
   parent.appendChild(newNode);
-  //for string
-  if (typeof nextNode != "object") return;
-  //for object
-  for (let i = 0; i < nextNode.children.length; i++) {
-    let nextChild = nextNode.children[i];
-    let result = extractJSXfrom(undefined, nextChild, newNode);
-    nextChild = result.nextNode;
-    if (nextChild && typeof nextChild === "object") {
-      nextChild.index = i;
-    }
-    add(nextChild, newNode);
-  }
 }
 
 export function remove(parent, child) {
@@ -186,5 +174,6 @@ export function replace(nextNode, parent, child) {
   parent.replaceChild(newNode, child);
 }
 export function render(jsx, node) {
+  node.innerHTML="";
   update(null, jsx, node);
 }

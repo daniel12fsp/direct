@@ -43,7 +43,7 @@ describe("Insert and Replace", () => {
     it("Empty Tree vs One-level tree", () => {
       const oldTree = <div />;
       const newTree = <div> 1 </div>;
-      add(oldTree, root);
+      update(null, oldTree, root);
       expect(root.innerHTML).toBe("<div></div>");
       update(oldTree, newTree, root);
       expect(root.innerHTML).toBe("<div> 1 </div>");

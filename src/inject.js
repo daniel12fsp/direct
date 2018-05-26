@@ -44,17 +44,20 @@ const expect = valueReceped => {
 isEqual = function(a, b) {
   var p, t;
   for (p in a) {
-    if (typeof b[p] === 'undefined') {
+    if (typeof b[p] === "undefined") {
       return false;
     }
     if (b[p] && !a[p]) {
       return false;
     }
     t = typeof a[p];
-    if (t === 'object' && !isEqual(a[p], b[p])) {
+    if (t === "object" && !isEqual(a[p], b[p])) {
       return false;
     }
-    if (t === 'function' && (typeof b[p] === 'undefined' || a[p].toString() !== b[p].toString())) {
+    if (
+      t === "function" &&
+      (typeof b[p] === "undefined" || a[p].toString() !== b[p].toString())
+    ) {
       return false;
     }
     if (a[p] !== b[p]) {
@@ -62,7 +65,7 @@ isEqual = function(a, b) {
     }
   }
   for (p in b) {
-    if (typeof a[p] === 'undefined') {
+    if (typeof a[p] === "undefined") {
       return false;
     }
   }
