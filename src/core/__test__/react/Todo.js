@@ -93,7 +93,6 @@ class TodoApp extends Component {
   render() {
     return (
       <div>
-        {/* <h3>TODO</h3> */}
         <TodoList items={this.state.items} />
         <h3>TODO</h3>
         <label >What needs to be done?</label>

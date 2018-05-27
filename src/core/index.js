@@ -102,7 +102,7 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
       return;
     }
     add(nextNode, node);
-    // return;
+    return;
   } else if (nextNode == null) {
     if (node=== undefined) return;
     remove(node, node.childNodes[indexPrevNode]);
@@ -186,6 +186,18 @@ export function add(nextNode, parent) {
   const newNode = createElementDom(nextNode);
   if (newNode === undefined) return;
   parent.appendChild(newNode);
+  //for string
+  if (typeof nextNode != "object") return;
+  //for object
+  for (let i = 0; i < nextNode.children.length; i++) {
+    let nextChild = nextNode.children[i];
+    let result = extractJSXfrom(undefined, nextChild, newNode);
+    nextChild = result.nextNode;
+    if (nextChild && typeof nextChild === "object") {
+      nextChild.index = i;
+    }
+    add(nextChild, newNode);
+  }
 }
 
 export function remove(parent, child) {

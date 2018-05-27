@@ -12,7 +12,8 @@
 // import "/home/daniel/code/dreact/src/core/__test__/react/Seconds.js"
 // import "/home/daniel/code/dreact/src/core/__test__/components/comp.todo.test.js";
 // import "/home/daniel/code/dreact/src/core/__test__/components/comp.wrong.test.js";
-import "/home/daniel/code/dreact/src/core/__test__/react/Todo.js";
+// import "/home/daniel/code/dreact/src/core/__test__/react/Todo.js";
+// import "/home/daniel/code/dreact/src/core/__test__/components/comp.array.test.js";
 
 // import { render, h, add, update } from "./core";
 // import { Component } from "./core/Component";
