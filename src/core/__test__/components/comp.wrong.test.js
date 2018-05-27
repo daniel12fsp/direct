@@ -6,7 +6,7 @@ import { p } from "../utils.js";
 class TodoApp extends Component {
   constructor(props) {
     super(props);
-    this.state = { items: [], text: "" };
+    this.state = { color: 0 };
   }
 
   render() {
@@ -14,7 +14,7 @@ class TodoApp extends Component {
       <div>
         <label >What needs to be done?</label>
         <div></div>
-        <span > {this.state.items.length + 4}</span>  
+        <span > {this.state.color + 4}</span>  
       </div>
     );
   }
@@ -34,20 +34,20 @@ class TodoApp extends Component {
       `);
       expect(p(root.innerHTML)).toBe(answear);
     })
-    xit("exec state", () => {
+    it("exec state", () => {
         let answear;
       ref.setState({color: ref.state.color + 1});
-      answear = p("<buttonclass=\"Hi\">Add1</button>");
+      answear = p("<div><label>Whatneedstobedone?</label><div></div><span>5</span></div>");
       expect(p(root.innerHTML)).toBe(answear);
       ref.setState({color: ref.state.color + 1});
-      answear = p("<buttonclass=\"Hi\">Add2</button>");
+      answear = p("<div><label>Whatneedstobedone?</label><div></div><span>6</span></div>");
       expect(p(root.innerHTML)).toBe(answear);
       ref.setState({color: ref.state.color + 1});
-      answear = p("<button>Add3</button>");
-      ref.setState({color: ref.state.color + 1});
-      answear = p("<buttonclass=\"Hi\">Add4</button>");
+      answear = p("<div><label>Whatneedstobedone?</label><div></div><span>7</span></div>");
       expect(p(root.innerHTML)).toBe(answear);
-
+      ref.setState({color: ref.state.color + 1});
+      answear = p("<div><label>Whatneedstobedone?</label><div></div><span>8</span></div>");
+      expect(p(root.innerHTML)).toBe(answear);
     })
 
   })

@@ -41,6 +41,32 @@ describe("Replace", () => {
       update(tree1, tree2, root);
       expect(root.innerHTML).toBe("<div>Be : smart</div>");
     });
+    it(" Replace tag not leave", () => {
+      const tree1 = (
+        <div>
+          <span/>
+        </div>
+      );
+      const tree2 = (
+        <h1>
+          <span/>
+        </h1>
+      );
+      update(null, tree1, root);
+      expect(root.innerHTML).toBe("<div><span></span></div>");
+      update(tree1, tree2, root);
+      expect(root.innerHTML).toBe("<h1><span></span></h1>");
+    });
+    it(" Replace array", () => {
+      const tree1 = [];
+      const tree2 = [<div />];
+      update(null, tree1, root);
+      expect(root.innerHTML).toBe("");
+      update(tree1, tree2, root);
+      expect(root.innerHTML).toBe("<div></div>");
+      update(tree2, [<span />], root);
+      expect(root.innerHTML).toBe("<span></span>");
+    });
   });
   describe("Nested", () => {
     it("One-level tree vs One-level tree ", () => {

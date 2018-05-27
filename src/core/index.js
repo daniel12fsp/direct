@@ -27,6 +27,24 @@ export function changed(previousNode, nextNode) {
   const strDiff =
     isSameType(previousNode, nextNode, "string") && previousNode !== nextNode;
   if (strDiff) return true;
+  const isArray = Array.isArray(previousNode) && Array.isArray(nextNode);
+  if (isArray){
+    if (previousNode.length === nextNode.length && nextNode.length===0){
+      return false;
+    }
+    if (previousNode.length!== nextNode.length){
+      return true;
+    }
+    nextNode.map((item, index) => {
+      if (changed(item, previousNode[index])){
+        return true;
+      }
+    })
+  }
+  const isThereArray = Array.isArray(previousNode) || Array.isArray(nextNode);
+  if (isThereArray){
+    return true;
+  }
   return false;
 }
 
@@ -38,7 +56,7 @@ function extractJSXfrom(previousNode, nextNode, node) {
         // node.instance.__ref__ = node;
         node.instance.__update__(nextNode.props);
         nextNode = node.instance.__nextDom__;
-        return { previousNode, nextNode };
+        return { previousNode, nextNode , updateBlocked: true };
       }
       if (nextNode && nextNode.type) {
         const newInstace = new nextNode.type(nextNode.props || {});
@@ -67,16 +85,18 @@ function extractJSXfrom(previousNode, nextNode, node) {
   if (isFunction(previousNode) || isFunction(nextNode)) {
     return extractJSXfrom(previousNode, nextNode, node);
   }
-  return { previousNode, nextNode };
+  return { previousNode, nextNode, updateBlocked: false  };
 }
 
 export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
-  let { previousNode, nextNode } = extractJSXfrom(
+  let { previousNode, nextNode, updateBlocked } = extractJSXfrom(
     previousNodeArg,
     nextNodeArg,
     node
   );
-
+  if (updateBlocked) {
+    return;
+  }
   if (previousNode == null) {
     if (nextNode == null) {
       return;
@@ -90,6 +110,12 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
   } else {
   const change = changed(previousNode, nextNode);
   if (change) {
+    if (Array.isArray(nextNode)) {
+      //TODO I dont like this =(
+      node.innerHTML = "";
+      nextNode.forEach(item => add(item, node));
+      return;
+    }
     replace(nextNode, node, node.childNodes[indexPrevNode]);
   }
   }
@@ -100,7 +126,7 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
   for (let i = 0; i < maxLength; i++) {
     const nextChild = nextChildren[i];
     const prevChild = prevChildren[i];
-    const prevNodeChild = node.children[i || indexPrevNode] || firstChild;
+    const prevNodeChild = node.children[indexPrevNode] || firstChild;
     update(prevChild, nextChild, prevNodeChild, i);
   }
 }
@@ -114,9 +140,9 @@ function createElementDom(element) {
       break;
     case "object":
       //id dev
-      // if (!element.type) {
-      //   throw Error("Type of object is not evaluaty");
-      // }
+      if (!element.type) {
+        throw Error("Type of object is not evaluaty");
+      }
       if (typeof element.type === "string") {
         newNode = document.createElement(element.type);
       }
@@ -171,7 +197,14 @@ export function replace(nextNode, parent, child) {
   if (nextNode == null || parent == null || child == null) return;
   const newNode = createElementDom(nextNode);
   if (newNode === null) return;
+  if (child.hasChildNodes()){
+    while(child.childNodes.length !==0){
+      const newChild = child.childNodes[0];
+      newNode.appendChild(newChild);
+    }
+  }
   parent.replaceChild(newNode, child);
+  
 }
 export function render(jsx, node) {
   node.innerHTML="";
