@@ -1,6 +1,6 @@
 import { update } from "./index";
 export class Component {
-  //TODO remove method can be overwrite
+  //TODO remove method can be overwrite when Test of lifecycle is ok
   constructor(props) {
     this.props = props;
     this.type = "COMPONENT";
