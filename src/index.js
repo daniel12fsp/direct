@@ -14,7 +14,8 @@
 // import "/home/daniel/code/dreact/src/core/__test__/components/comp.wrong.test.js";
 // import "/home/daniel/code/dreact/src/core/__test__/react/Todo.js";
 // import "/home/daniel/code/dreact/src/core/__test__/components/comp.array.test.js";
-
+// import "/home/daniel/code/dreact/src/core/__test__/components/comp.position.test.js";
+// import "/home/daniel/code/dreact/src/core/__test__/inferno/1kcomponents.js";
 // import { render, h, add, update } from "./core";
 // import { Component } from "./core/Component";
 // import { p } from "./core/__test__/utils";

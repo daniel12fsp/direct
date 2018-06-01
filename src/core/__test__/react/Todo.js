@@ -74,13 +74,12 @@ class TodoApp extends Component {
   }
 
   handleChange(e) {
-      // this.setState({ text: e.target.value });
+      this.setState({ text: e.target.value });
   }
 
   handleClick(e) {
-    console.log("handleClick");
     const newItem = {
-      text: String(new Date()),
+      text: this.state.text,
       id: Date.now()
     };
     const { items } = this.state;
@@ -93,12 +92,12 @@ class TodoApp extends Component {
   render() {
     return (
       <div>
-        <TodoList items={this.state.items} />
         <h3>TODO</h3>
+        <TodoList items={this.state.items} />
         <label >What needs to be done?</label>
         <div></div>
         <input
-          onChange={this.handleChange}
+          onInput={this.handleChange}
           value={this.state.text}
         />
         <button onClick={this.handleClick}>

@@ -1,8 +1,4 @@
-//initial setState
-// make this.setState accept function as paramaters
-//TODO make setState asynchrony again
-
-// Name for direct ->,
+export default h;
 export function h(type, props, ...children) {
   return { type, props, children };
 }
@@ -48,13 +44,14 @@ export function changed(previousNode, nextNode) {
   return false;
 }
 
-function extractJSXfrom(previousNode, nextNode, node) {
+function extractJSXfrom(previousNode, nextNode, node, indexPrevNode = 0) {
   if (nextNode && nextNode.type && typeof nextNode.type === "function") {
     //TODO maybe another way?
     if (nextNode.type.prototype.render) {
       if (previousNode && previousNode.type === nextNode.type) {
         // node.instance.__ref__ = node;
-        node.instance.__update__(nextNode.props);
+        node.instance.index=indexPrevNode;
+        node.instance.__update__(nextNode.props, indexPrevNode);
         nextNode = node.instance.__nextDom__;
         return { previousNode, nextNode , updateBlocked: true };
       }
@@ -62,7 +59,7 @@ function extractJSXfrom(previousNode, nextNode, node) {
         const newInstace = new nextNode.type(nextNode.props || {});
         node.instance = newInstace;
         // node.instance.__ref__ = node;
-        node.instance.__mount__(node);
+        node.instance.__mount__(node, indexPrevNode);
         nextNode.props && nextNode.props.ref && nextNode.props.ref(newInstace);
         nextNode = newInstace.__nextDom__;
       }
@@ -92,7 +89,8 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
   let { previousNode, nextNode, updateBlocked } = extractJSXfrom(
     previousNodeArg,
     nextNodeArg,
-    node
+    node,
+    indexPrevNode
   );
   if (updateBlocked) {
     return;
@@ -111,8 +109,10 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
   const change = changed(previousNode, nextNode);
   if (change) {
     if (Array.isArray(nextNode)) {
-      //TODO I dont like this =(
-      node.innerHTML = "";
+      const childNodes = node.childNodes;
+      while(childNodes.length !==indexPrevNode){
+        childNodes[indexPrevNode].remove();
+      }
       nextNode.forEach(item => add(item, node));
       return;
     }
@@ -162,7 +162,7 @@ function createElementDom(element) {
   return newNode;
 }
 
-const events = new Set(["onclick", "onkeydown", "onchange", "onsubmit"]);
+const events = new Set(["onclick", "onkeydown", "onchange", "oninput","onsubmit"]);
 export function addProps(node, props) {
   Object.keys(props).forEach(key => {
     if (typeof value === "function") return;
