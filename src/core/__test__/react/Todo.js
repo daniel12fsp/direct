@@ -74,7 +74,7 @@ class TodoApp extends Component {
   }
 
   handleChange(e) {
-      this.setState({ text: e.target.value });
+    this.setState({ text: e.target.value });
   }
 
   handleClick(e) {
@@ -94,15 +94,12 @@ class TodoApp extends Component {
       <div>
         <h3>TODO</h3>
         <TodoList items={this.state.items} />
-        <label >What needs to be done?</label>
-        <div></div>
-        <input
-          onInput={this.handleChange}
-          value={this.state.text}
-        />
+        <label>What needs to be done?</label>
+        <div />
+        <input onInput={this.handleChange} value={this.state.text} />
         <button onClick={this.handleClick}>
           Add #{this.state.items.length + 1}
-        </button>  
+        </button>
       </div>
     );
   }
@@ -118,4 +115,7 @@ class TodoList extends Component {
   }
 }
 
-render(<TodoApp ref={e=> window.ref = e} />, document.getElementById("root"));
+render(
+  <TodoApp ref={e => (window.ref = e)} />,
+  document.getElementById("root")
+);

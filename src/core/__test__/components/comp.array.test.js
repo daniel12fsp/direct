@@ -8,7 +8,9 @@ let fnParent = e => (parentRef = e);
 class Child extends Component {
   render() {
     const { items } = this.props;
-    return <div> {items.map(({key, value})=> <div key={key}>{value}</div>)} </div>;
+    return (
+      <div> {items.map(({ key, value }) => <div key={key}>{value}</div>)} </div>
+    );
   }
 }
 
@@ -37,11 +39,16 @@ describe("State <Component />", () => {
   it("Parent Works", () => {
     update(null, <Parent ref={fnParent} />, root);
     expect(p(root.innerHTML)).toBe("<div><div></div></div>");
-    parentRef.setState({items: [{
-      key: 1,
-      value: "first"
-    }]});
-    expect(p(root.innerHTML)).toBe("<div><div><divkey=\"1\">first</div></div></div>");
-
+    parentRef.setState({
+      items: [
+        {
+          key: 1,
+          value: "first"
+        }
+      ]
+    });
+    expect(p(root.innerHTML)).toBe(
+      '<div><div><divkey="1">first</div></div></div>'
+    );
   });
 });

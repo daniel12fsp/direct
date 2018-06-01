@@ -24,21 +24,21 @@ export function changed(previousNode, nextNode) {
     isSameType(previousNode, nextNode, "string") && previousNode !== nextNode;
   if (strDiff) return true;
   const isArray = Array.isArray(previousNode) && Array.isArray(nextNode);
-  if (isArray){
-    if (previousNode.length === nextNode.length && nextNode.length===0){
+  if (isArray) {
+    if (previousNode.length === nextNode.length && nextNode.length === 0) {
       return false;
     }
-    if (previousNode.length!== nextNode.length){
+    if (previousNode.length !== nextNode.length) {
       return true;
     }
     nextNode.map((item, index) => {
-      if (changed(item, previousNode[index])){
+      if (changed(item, previousNode[index])) {
         return true;
       }
-    })
+    });
   }
   const isThereArray = Array.isArray(previousNode) || Array.isArray(nextNode);
-  if (isThereArray){
+  if (isThereArray) {
     return true;
   }
   return false;
@@ -50,10 +50,10 @@ function extractJSXfrom(previousNode, nextNode, node, indexPrevNode = 0) {
     if (nextNode.type.prototype.render) {
       if (previousNode && previousNode.type === nextNode.type) {
         // node.instance.__ref__ = node;
-        node.instance.index=indexPrevNode;
+        node.instance.index = indexPrevNode;
         node.instance.__update__(nextNode.props, indexPrevNode);
         nextNode = node.instance.__nextDom__;
-        return { previousNode, nextNode , updateBlocked: true };
+        return { previousNode, nextNode, updateBlocked: true };
       }
       if (nextNode && nextNode.type) {
         const newInstace = new nextNode.type(nextNode.props || {});
@@ -82,7 +82,7 @@ function extractJSXfrom(previousNode, nextNode, node, indexPrevNode = 0) {
   if (isFunction(previousNode) || isFunction(nextNode)) {
     return extractJSXfrom(previousNode, nextNode, node);
   }
-  return { previousNode, nextNode, updateBlocked: false  };
+  return { previousNode, nextNode, updateBlocked: false };
 }
 
 export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
@@ -102,22 +102,22 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
     add(nextNode, node);
     return;
   } else if (nextNode == null) {
-    if (node=== undefined) return;
+    if (node === undefined) return;
     remove(node, node.childNodes[indexPrevNode]);
     return;
   } else {
-  const change = changed(previousNode, nextNode);
-  if (change) {
-    if (Array.isArray(nextNode)) {
-      const childNodes = node.childNodes;
-      while(childNodes.length !==indexPrevNode){
-        childNodes[indexPrevNode].remove();
+    const change = changed(previousNode, nextNode);
+    if (change) {
+      if (Array.isArray(nextNode)) {
+        const childNodes = node.childNodes;
+        while (childNodes.length !== indexPrevNode) {
+          childNodes[indexPrevNode].remove();
+        }
+        nextNode.forEach(item => add(item, node));
+        return;
       }
-      nextNode.forEach(item => add(item, node));
-      return;
+      replace(nextNode, node, node.childNodes[indexPrevNode]);
     }
-    replace(nextNode, node, node.childNodes[indexPrevNode]);
-  }
   }
   const firstChild = node.children[0];
   const prevChildren = (previousNode && previousNode.children) || [];
@@ -162,10 +162,15 @@ function createElementDom(element) {
   return newNode;
 }
 
-const events = new Set(["onclick", "onkeydown", "onchange", "oninput","onsubmit"]);
+const events = new Set([
+  "onclick",
+  "onkeydown",
+  "onchange",
+  "oninput",
+  "onsubmit"
+]);
 export function addProps(node, props) {
   Object.keys(props).forEach(key => {
-    if (typeof value === "function") return;
     const value = props[key];
     const normalizeteKey = key.toLocaleLowerCase();
     if (events.has(normalizeteKey)) {
@@ -201,24 +206,22 @@ export function add(nextNode, parent) {
 }
 
 export function remove(parent, child) {
-  if (parent == null || child == null) return;
   parent.removeChild(child);
 }
 
 export function replace(nextNode, parent, child) {
-  if (nextNode == null || parent == null || child == null) return;
   const newNode = createElementDom(nextNode);
-  if (newNode === null) return;
-  if (child.hasChildNodes()){
-    while(child.childNodes.length !==0){
+  if (newNode === undefined) return;
+  if (child.hasChildNodes()) {
+    while (child.childNodes.length !== 0) {
       const newChild = child.childNodes[0];
       newNode.appendChild(newChild);
     }
   }
   parent.replaceChild(newNode, child);
-  
 }
+
 export function render(jsx, node) {
-  node.innerHTML="";
+  node.innerHTML = "";
   update(null, jsx, node);
 }

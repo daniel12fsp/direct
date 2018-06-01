@@ -15,7 +15,7 @@ export class Component {
     this.__prevDom__ = this.__nextDom__;
     this.__nextDom__ = this.render();
     this.__ref__ = node;
-     //TODO make this work again
+    //TODO make this work again
     // update(this.__prevDom__, this.__nextDom__, this.__ref__);
     this.componentDidMount();
   }
@@ -29,7 +29,7 @@ export class Component {
     if (this.shouldComponentUpdate(nextProps, nextState)) {
       this.__prevDom__ = this.__nextDom__;
       this.__nextDom__ = this.render();
-      update(this.__prevDom__, this.__nextDom__, this.__ref__, this.index||0);
+      update(this.__prevDom__, this.__nextDom__, this.__ref__, this.index || 0);
       this.componentDidUpdate(prevProps, prevState);
     }
   }

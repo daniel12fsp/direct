@@ -44,12 +44,12 @@ describe("Replace", () => {
     it(" Replace tag not leave", () => {
       const tree1 = (
         <div>
-          <span/>
+          <span />
         </div>
       );
       const tree2 = (
         <h1>
-          <span/>
+          <span />
         </h1>
       );
       update(null, tree1, root);

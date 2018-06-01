@@ -79,7 +79,7 @@ describe("Changed", () => {
   });
   it(" array vs array", () => {
     expect(changed([], [])).toBe(false);
-    expect(changed([<span/>, <div/>], 1)).toBe(true);
+    expect(changed([<span />, <div />], 1)).toBe(true);
     expect(changed([<div />], <span />)).toBe(true);
     expect(changed([<div />], [<span />])).toBe(true);
     expect(changed([<div />], [])).toBe(true);
