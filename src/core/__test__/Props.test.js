@@ -21,8 +21,16 @@ describe("Props to attributes", () => {
     expect(root.hasAttribute("class")).toBe(true);
     expect(root.getAttribute("class")).toBe("clasz");
   });
-  it("Shoud don't exist ref", () => {
-    addProps(root, { ref: () => {} });
-    expect(root.hasAttribute("ref")).toBe(true);
+  it("Shoud style to be string", () => {
+    addProps(root, { style: {top:'0', backgroundImage: 'lightblue', boxShadow: '0 0 1px 1px red', marginLeft: 8}});
+    expect(root.hasAttribute("style")).toBe(true);
+    expect(root.getAttribute("style")).toBe("");
+  });
+  it("Shoudn't exist reserved props", () => {
+    addProps(root, { ref: () => {}, key: '1', __self:{}, __source: {}});
+    expect(root.hasAttribute("ref")).toBe(false);
+    expect(root.hasAttribute("key")).toBe(false);
+    expect(root.hasAttribute("__self")).toBe(false);
+    expect(root.hasAttribute("__source")).toBe(false);
   });
 });

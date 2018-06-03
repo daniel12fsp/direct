@@ -62,8 +62,18 @@ const events = new Set([
   "onkeydown",
   "onchange",
   "oninput",
-  "onsubmit"
+  "onsubmit",
+  "onkeyup"
 ]);
+
+
+const RESERVED_PROPS = new Set([
+  "key",
+  "ref",
+  "__self",
+  "__source",
+]);
+
 export function addProps(node, props) {
   if (!props) return;
   Object.keys(props).forEach(key => {
@@ -74,7 +84,12 @@ export function addProps(node, props) {
       return;
     }
     const attr = key === "className" ? "class" : normalizeteKey;
-    node.setAttribute(attr, value);
+    if (attr === "style") {
+      //TODO parse object to string
+    }
+    if (!RESERVED_PROPS.has(attr)) {
+      node.setAttribute(attr, value);
+    }
   });
 }
 

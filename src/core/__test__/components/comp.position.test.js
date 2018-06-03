@@ -54,7 +54,7 @@ describe("State <Component />", () => {
     });
     parentRef.setState({ items });
     expect(p(root.innerHTML)).toBe(
-      '<div><h3>Helllow</h3><h2><divkey="1">first</div></h2></div>'
+      '<div><h3>Helllow</h3><h2><div>first</div></h2></div>'
     );
     items.push({
       key: 2,
@@ -62,7 +62,7 @@ describe("State <Component />", () => {
     });
     parentRef.setState({ items });
     expect(p(root.innerHTML)).toBe(
-      '<div><h3>Helllow</h3><h2><divkey="1">first</div><divkey="2">second</div></h2></div>'
+      '<div><h3>Helllow</h3><h2><div>first</div><div>second</div></h2></div>'
     );
     items.push({
       key: 3,
@@ -70,7 +70,7 @@ describe("State <Component />", () => {
     });
     parentRef.setState({ items });
     expect(p(root.innerHTML)).toBe(
-      '<div><h3>Helllow</h3><h2><divkey="1">first</div><divkey="2">second</div><divkey="3">third</div></h2></div>'
+      '<div><h3>Helllow</h3><h2><div>first</div><div>second</div><div>third</div></h2></div>'
     );
   });
   it("Parent Works", () => {
@@ -85,7 +85,7 @@ describe("State <Component />", () => {
       ]
     });
     expect(p(root.innerHTML)).toBe(
-      '<div><h3>Helllow</h3><divkey="1">first</div></div>'
+      '<div><h3>Helllow</h3><div>first</div></div>'
     );
   });
 });

@@ -1,6 +1,13 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const path = require("path");
 module.exports = {
+    output: {
+      filename: 'direct.js',
+      path:  path.join(__dirname, 'dist'),
+      library: 'library',
+      libraryTarget: 'umd'
+    },
     module: {
       rules: [
         {
@@ -19,17 +26,3 @@ module.exports = {
     ])
     ]
   };
-
-
-
-// const config = {
-//   plugins: [
-//     new CopyWebpackPlugin([ ...patterns ], options)
-//   ]
-// }
-
-
-// // webpack config
-// {
-  
-// }

@@ -48,7 +48,7 @@ describe("State <Component />", () => {
       ]
     });
     expect(p(root.innerHTML)).toBe(
-      '<div><div><divkey="1">first</div></div></div>'
+      '<div><div><div>first</div></div></div>'
     );
   });
 });
