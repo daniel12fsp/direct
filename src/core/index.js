@@ -29,6 +29,7 @@ export function update(previousNodeArg, nextNodeArg, node, indexPrevNode = 0) {
     replace(nextNode, node, indexPrevNode);
   }
   const firstChild = node.children[0];
+  if (!firstChild) return;
   const prevChildren = (previousNode && previousNode.children) || [];
   const nextChildren = (nextNode && nextNode.children) || [];
   const maxLength = Math.max(nextChildren.length, prevChildren.length);
@@ -134,7 +135,7 @@ function replaceNode(nextNode, parent, indexPrevNode) {
   const child = parent.childNodes[indexPrevNode];
   const newNode = createElementDom(nextNode);
   //TODO problably need a test
-  if (typeof newNode === "undefined") return;
+  if (typeof child === "undefined" || typeof newNode === "undefined") return;
   if (child.hasChildNodes()) {
     while (child.childNodes.length !== 0) {
       const newChild = child.childNodes[0];
