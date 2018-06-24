@@ -43,27 +43,24 @@ class DumbCompoment extends Component {
   }
 }
 
-
-class Dumbest extends DumbCompoment{
-    componentDidMount() {
-        lifecycle.push("componentDidMount");
-        this.setState({status: "I'm brazilian"})
-    }
+class Dumbest extends DumbCompoment {
+  componentDidMount() {
+    lifecycle.push("componentDidMount");
+    this.setState({ status: "I'm brazilian" });
+  }
 }
 let root;
 let dumb;
 root = document.createElement("div");
 lifecycle = [];
 describe("Component lifecycle", () => {
-
-
   it("Shoud these lifecycle to be called in mount stage", () => {
     const answear = p(
       `<div>
             I'm dumb
             </div>`
     );
-    render( <DumbCompoment beSmart={false} ref={(e) => dumb = e} />, root);
+    render(<DumbCompoment beSmart={false} ref={e => (dumb = e)} />, root);
     expect(p(root.innerHTML)).toBe(answear);
     const methods = [
       "constructor",
@@ -82,17 +79,21 @@ describe("Component lifecycle", () => {
             I'm dumb
             </div>`
     );
-    dumb.setState({status: "I'm here"});
+    dumb.setState({ status: "I'm here" });
     expect(p(root.innerHTML)).toBe("<div>I'mhere</div>");
     const methods = [
-        "componentWillReceiveProps", "componentWillUpdate", "shouldComponentUpdate", "render", "componentDidUpdate"
+      "componentWillReceiveProps",
+      "componentWillUpdate",
+      "shouldComponentUpdate",
+      "render",
+      "componentDidUpdate"
     ];
     expect(lifecycle).toEqual(methods);
   });
   it("Shoud setState in didmount works", () => {
     root = document.createElement("div");
     lifecycle = [];
-    render( <Dumbest ref={(e) => dumb = e} />, root);
+    render(<Dumbest ref={e => (dumb = e)} />, root);
     expect(p(root.innerHTML)).toBe("<div>I'mbrazilian</div>");
   });
 });

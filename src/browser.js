@@ -1,1 +1,1 @@
-import "./core/__test__/components/comp.lifecycle.test.js"
+import "./core/__test__/Array.test.js";

@@ -22,12 +22,19 @@ describe("Props to attributes", () => {
     expect(root.getAttribute("class")).toBe("clasz");
   });
   it("Shoud style to be string", () => {
-    addProps(root, { style: {top:'0', backgroundImage: 'lightblue', boxShadow: '0 0 1px 1px red', marginLeft: 8}});
+    addProps(root, {
+      style: {
+        top: "0",
+        backgroundImage: "lightblue",
+        boxShadow: "0 0 1px 1px red",
+        marginLeft: 8
+      }
+    });
     expect(root.hasAttribute("style")).toBe(true);
     expect(root.getAttribute("style")).toBe("");
   });
   it("Shoudn't exist reserved props", () => {
-    addProps(root, { ref: () => {}, key: '1', __self:{}, __source: {}});
+    addProps(root, { ref: () => {}, key: "1", __self: {}, __source: {} });
     expect(root.hasAttribute("ref")).toBe(false);
     expect(root.hasAttribute("key")).toBe(false);
     expect(root.hasAttribute("__self")).toBe(false);

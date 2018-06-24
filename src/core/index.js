@@ -67,13 +67,7 @@ const events = new Set([
   "onkeyup"
 ]);
 
-
-const RESERVED_PROPS = new Set([
-  "key",
-  "ref",
-  "__self",
-  "__source",
-]);
+const RESERVED_PROPS = new Set(["key", "ref", "__self", "__source"]);
 
 export function addProps(node, props) {
   if (!props) return;
@@ -111,8 +105,14 @@ function addNode(nextNode, parent) {
 function add(nextNode, parent) {
   if (nextNode == null) return;
   if (Array.isArray(nextNode)) {
-    nextNode.forEach(item => add(item, parent));
+    nextNode.forEach(item => {
+      const result = extractJSXfrom(undefined, item, parent);
+      item = result.nextNode;
+      add(item, parent);
+    });
   } else {
+    const result = extractJSXfrom(undefined, nextNode, parent);
+    nextNode = result.nextNode;
     addNode(nextNode, parent);
   }
 }
