@@ -1,4 +1,4 @@
-import { update, add, h } from "../index";
+import { update, add, h, render } from "../index";
 import { Component } from "../Component";
 
 class C extends Component {
@@ -11,8 +11,28 @@ function F() {
   return <div>Component stateless</div>;
 }
 
-function Parent({children}) {
+function Parent({ children }) {
   return <div>{children}</div>;
+}
+
+class LazyParent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: []
+    };
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        value: [1, 2, 3]
+      });
+    }, 200);
+  }
+  render() {
+    const { value } = this.state;
+    return <div>{value}</div>;
+  }
 }
 describe("Array", () => {
   let root;
@@ -42,35 +62,23 @@ describe("Array", () => {
   });
 
   it("Must array be in dom", () => {
-    update(
-      null,
-      <span>
-        {[<C />, <F />]}
-        {() => Here}
-      </span>,
-      root
-    );
+    update(null, <span>{[<C />, <F />]}</span>, root);
     expect(root.innerHTML).toBe(
-      "<span><div>Component</div><div>Component stateless</div><div>Component stateless</div><div>Component</div></span>"
+      "<span><div>Component</div><div>Component stateless</div></span>"
     );
   });
 
-  it("Must array be in dom", () => {
-    update(
-      null,
-      <div>
-        <Parent>
-          {[<C />, <F />]}
-        </Parent>
-        <Parent>
-          {[<C />, <F />]}
-        </Parent>
-      </div>
-      ,
+  it("Must be in dom", done => {
+    render(
+      <h1>
+        <LazyParent />
+        <LazyParent />
+      </h1>,
       root
     );
-    expect(root.innerHTML).toBe(
-      ""
-    );
+    setTimeout(() => {
+      expect(root.innerHTML).toBe("<h1><div>123</div><div>123</div></h1>");
+      done();
+    }, 200);
   });
 });

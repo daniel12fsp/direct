@@ -24,14 +24,12 @@ describe("Props to attributes", () => {
   it("Shoud style to be string", () => {
     addProps(root, {
       style: {
-        top: "0",
-        backgroundImage: "lightblue",
-        boxShadow: "0 0 1px 1px red",
-        marginLeft: 8
+        marginLeft: "10px"
       }
     });
+
     expect(root.hasAttribute("style")).toBe(true);
-    expect(root.getAttribute("style")).toBe("");
+    expect(root.getAttribute("style")).toBe("margin-left: 10px;");
   });
   it("Shoudn't exist reserved props", () => {
     addProps(root, { ref: () => {}, key: "1", __self: {}, __source: {} });

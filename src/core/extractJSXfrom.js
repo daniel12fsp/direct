@@ -25,7 +25,9 @@ export function extractJSXfrom(
         //TODO problably need a return to block update
       }
     } else {
-      nextNode = nextNode.type(nextNode.props || {});
+      nextNode = nextNode.type(
+        { ...nextNode.props, children: nextNode.children } || {}
+      );
     }
   }
   if (isComponent(previousNode)) {

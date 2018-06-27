@@ -38,7 +38,6 @@ class DumbCompoment extends Component {
   }
   render() {
     lifecycle.push("render");
-    console.log(this.state);
     return <div>{this.state.status}</div>;
   }
 }

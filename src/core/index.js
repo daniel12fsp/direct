@@ -67,8 +67,8 @@ const events = new Set([
   "onkeyup"
 ]);
 
-const RESERVED_PROPS = new Set(["key", "ref", "__self", "__source"]);
-
+const RESERVED_PROPS = new Set(["key", "style", "ref", "__self", "__source"]);
+const propsToCssProps = (props) => props.replace(/([A-Z])/, "-$1").toLowerCase();
 export function addProps(node, props) {
   if (!props) return;
   Object.keys(props).forEach(key => {
@@ -79,8 +79,10 @@ export function addProps(node, props) {
       return;
     }
     const attr = key === "className" ? "class" : normalizeteKey;
-    if (attr === "style") {
-      //TODO parse object to string
+    if (attr === "style" && typeof props.style === "object") {
+      Object.keys(props.style).forEach(key => {
+        node.style.setProperty(propsToCssProps(key), props.style[key]);
+      });
     }
     if (!RESERVED_PROPS.has(attr)) {
       node.setAttribute(attr, value);
@@ -95,7 +97,7 @@ function addNode(nextNode, parent) {
   if (Array.isArray(nextNode.children)) {
     for (let i = 0; i < nextNode.children.length; i++) {
       let nextChild = nextNode.children[i];
-      let result = extractJSXfrom(undefined, nextChild, newNode);
+      let result = extractJSXfrom(undefined, nextChild, newNode, i);
       nextChild = result.nextNode;
       add(nextChild, newNode);
     }

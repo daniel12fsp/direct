@@ -9,11 +9,12 @@ export class Component {
     this.__ref__ = null;
     this.state = {};
   }
-  __mount__(node) {
+  __mount__(node, index) {
     // if (! this.__nextDom__) return;
     this.componentWillMount();
     this.__prevDom__ = this.__nextDom__;
     this.__nextDom__ = this.render();
+    this.index = index;
     this.__ref__ = node;
     //TODO make this work again
     // update(this.__prevDom__, this.__nextDom__, this.__ref__);
