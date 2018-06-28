@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --env=jsdom --watchAll",
+    "test-web": "webpack-dev-server --config webpack.config.browser.js --mode development --content-base distBrowser",
     "build": "webpack --mode development",
-    "web": "webpack-dev-server --config webpack.config.dev.js --mode development --content-base distBrowser",
     "prettier": "prettier --write 'src/**/*.js'"
   },
   "devDependencies": {
